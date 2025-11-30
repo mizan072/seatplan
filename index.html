@@ -3,13 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seat Plan Finder</title>
+    
+    <!-- Primary Meta Tags -->
+    <title>Exam Seat Plan Portal | Unofficial Search Tool</title>
+    <meta name="title" content="Exam Seat Plan Portal | Unofficial Search Tool">
+    <meta name="description" content="Instantly find your exam center seat plan, address, and Google Maps location. Enter your roll number to check your seat location for upcoming competitive exams.">
+    <meta name="keywords" content="seat plan, exam center, bank exam, bcs seat plan, dhaka exam center, roll number search">
+    <meta name="author" content="Seat Plan Portal">
+
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://seatplan.pages.dev/"> <!-- Replace with your actual URL -->
+    <meta property="og:title" content="Exam Seat Plan Finder - Check Your Center">
+    <meta property="og:description" content="Find your exam center, address, and map location instantly. Just enter your roll number.">
+    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/3000/3000745.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Exam Seat Plan Finder - Check Your Center">
+    <meta property="twitter:description" content="Find your exam center, address, and map location instantly. Just enter your roll number.">
+    <meta property="twitter:image" content="https://cdn-icons-png.flaticon.com/512/3000/3000745.png">
+
+    <!-- Favicon (Search Document Icon) -->
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2814/2814666.png">
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <script>
         tailwind.config = {
             theme: {
@@ -45,13 +69,12 @@
     </script>
     <style>
         body { -webkit-tap-highlight-color: transparent; }
-        /* Custom scrollbar for webkit */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         .glass-header {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
         }
@@ -260,14 +283,12 @@
         // App Logic
         document.addEventListener('DOMContentLoaded', async () => {
             try {
-                // Attempt to fetch from JSON
                 const response = await fetch('seat_plan.json');
                 if (!response.ok) throw new Error("JSON not found");
                 examData = await response.json();
                 initApp();
             } catch (error) {
                 console.log("Using fallback data for preview.");
-                // Fallback for immediate preview if JSON fetch fails in this environment
                 if (typeof fallbackData !== 'undefined') {
                     examData = fallbackData;
                     initApp();
@@ -298,19 +319,16 @@
 
             if (!roll) {
                 input.focus();
-                // Shake effect
                 input.parentElement.classList.add('translate-x-1');
                 setTimeout(() => input.parentElement.classList.remove('translate-x-1'), 100);
                 return;
             }
 
-            // UI Feedback
             resultArea.classList.add('hidden');
             resultArea.innerHTML = '';
             
             const found = examData.centers.find(c => roll >= c.startRoll && roll <= c.endRoll);
 
-            // Small delay for UX feeling
             setTimeout(() => {
                 resultArea.classList.remove('hidden');
                 
