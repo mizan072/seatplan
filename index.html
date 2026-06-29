@@ -1,480 +1,488 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- Primary Meta Tags -->
-    <title>Exam Seat Plan Portal | Unofficial Search Tool</title>
-    <meta name="title" content="Exam Seat Plan Portal | Unofficial Search Tool">
-    <meta name="description" content="Instantly find your exam center seat plan, address, and Google Maps location. Enter your roll number to check your seat location for upcoming competitive exams.">
-    <meta name="keywords" content="seat plan, exam center, bank exam, bcs seat plan, dhaka exam center, roll number search">
-    <meta name="author" content="Seat Plan Portal">
-
-    <!-- Open Graph / Facebook / WhatsApp -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://seatplan.pages.dev/"> <!-- Replace with your actual URL -->
-    <meta property="og:title" content="Exam Seat Plan Finder - Check Your Center">
-    <meta property="og:description" content="Find your exam center, address, and map location instantly. Just enter your roll number.">
-    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/3000/3000745.png">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:title" content="Exam Seat Plan Finder - Check Your Center">
-    <meta property="twitter:description" content="Find your exam center, address, and map location instantly. Just enter your roll number.">
-    <meta property="twitter:image" content="https://cdn-icons-png.flaticon.com/512/3000/3000745.png">
-
-    <!-- Favicon (Search Document Icon) -->
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2814/2814666.png">
-
-    <!-- Tailwind CSS -->
+    <title>স্মার্ট সিট ও রেজাল্ট ফাইন্ডার</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                    },
-                    colors: {
-                        primary: {
-                            50: '#f0f9ff',
-                            100: '#e0f2fe',
-                            500: '#0ea5e9',
-                            600: '#0284c7',
-                            700: '#0369a1',
-                            900: '#0c4a6e',
-                        },
-                        dark: {
-                            900: '#0f172a',
-                            800: '#1e293b',
-                        }
-                    },
-                    animation: {
-                        'fade-in': 'fadeIn 0.5s ease-out forwards',
-                        'slide-up': 'slideUp 0.4s ease-out forwards',
-                    },
-                    keyframes: {
-                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
-                        slideUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } }
-                    }
-                }
-            }
-        }
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { -webkit-tap-highlight-color: transparent; }
+        body { 
+            font-family: 'Inter', 'Noto Sans Bengali', sans-serif; 
+            -webkit-tap-highlight-color: transparent;
+        }
+        .slide-up { animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        /* Custom scrollbar */
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        .glass-header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+        
+        /* Smooth select styling */
+        select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 1rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans">
+<body class="bg-slate-50 min-h-screen flex items-center justify-center p-4 sm:p-6 lg:bg-gradient-to-br lg:from-slate-100 lg:to-indigo-50">
 
-    <!-- Navigation -->
-    <nav class="glass-header fixed w-full top-0 z-50 border-b border-slate-200">
-        <div class="max-w-3xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-2.5">
-                <div class="bg-primary-600 text-white w-9 h-9 rounded-xl flex items-center justify-center shadow-lg shadow-primary-500/30">
-                    <i class="fas fa-search-location"></i>
-                </div>
-                <div class="flex flex-col">
-                    <span class="font-bold text-slate-900 leading-none text-lg">Seat Plan</span>
-                    <span class="text-[10px] font-bold text-slate-400 tracking-wider uppercase">Beta Portal</span>
-                </div>
-            </div>
-            <button onclick="toggleModal('aboutModal')" class="text-slate-500 hover:text-primary-600 transition-colors p-2">
-                <i class="fas fa-info-circle text-lg"></i>
-            </button>
-        </div>
-    </nav>
-
-    <!-- Main Content -->
-    <main class="flex-grow pt-24 pb-12 px-4 sm:px-6 w-full max-w-3xl mx-auto flex flex-col items-center">
+    <div class="w-full max-w-[28rem] bg-white rounded-[2rem] shadow-2xl overflow-hidden border border-slate-100/50 relative">
         
-        <!-- Loading Spinner -->
-        <div id="loading" class="flex flex-col items-center justify-center py-20 text-slate-400 animate-pulse">
-            <div class="w-12 h-12 border-4 border-slate-200 border-t-primary-500 rounded-full animate-spin mb-4"></div>
-            <p class="font-medium text-sm">Fetching exam data...</p>
-        </div>
+        <!-- Decorative Background Blob -->
+        <div class="absolute top-0 left-0 w-full h-48 bg-gradient-to-br from-indigo-500 via-blue-600 to-blue-700 opacity-10 blur-2xl z-0 pointer-events-none"></div>
 
-        <!-- Error State -->
-        <div id="error" class="hidden text-center py-10 w-full animate-fade-in">
-             <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-50 text-red-500 mb-4 border border-red-100">
-                <i class="fas fa-wifi text-2xl"></i>
+        <!-- Header Section -->
+        <div class="relative z-10 bg-gradient-to-r from-indigo-600 to-blue-600 p-8 text-center text-white rounded-b-[2.5rem] shadow-md">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl mb-4 shadow-inner">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path>
+                </svg>
             </div>
-            <h3 class="text-lg font-bold text-slate-800">Connection Failed</h3>
-            <p class="text-slate-500 text-sm mt-2 mb-6">Unable to load the seat plan configuration file.</p>
-            <button onclick="location.reload()" class="bg-slate-800 text-white px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-black transition shadow-lg">
-                Try Again
-            </button>
+            <h1 class="text-2xl font-bold tracking-tight mb-1">স্মার্ট ফাইন্ডার</h1>
+            <p class="text-indigo-100 text-sm font-medium opacity-90">সিট প্ল্যান ও রেজাল্ট এক ক্লিকেই</p>
         </div>
 
-        <!-- App Container (Hidden until loaded) -->
-        <div id="appContent" class="hidden w-full space-y-6 animate-fade-in max-w-xl mx-auto">
+        <!-- Main Form Area -->
+        <div class="p-6 sm:p-8 relative z-10 -mt-4 bg-white rounded-t-[2.5rem]">
+            <form id="searchForm" class="space-y-6">
+                
+                <!-- Exam Selection Dropdown -->
+                <div>
+                    <label for="examSelect" class="block text-sm font-semibold text-slate-700 mb-2 ml-1">পরীক্ষা নির্বাচন করুন</label>
+                    <div class="relative group">
+                        <select id="examSelect" class="block w-full pl-4 pr-10 py-3.5 text-base border-slate-200 border-2 focus:outline-none focus:ring-0 focus:border-indigo-500 sm:text-sm rounded-2xl appearance-none bg-slate-50 text-slate-800 transition-all group-hover:border-indigo-300">
+                            <!-- Options injected dynamically -->
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Roll Number Input -->
+                <div>
+                    <label for="rollNumber" class="block text-sm font-semibold text-slate-700 mb-2 ml-1">আপনার রোল নম্বর</label>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-slate-400 group-focus-within:text-indigo-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
+                            </svg>
+                        </div>
+                        <input type="number" id="rollNumber" placeholder="যেমন: 613000" required
+                            class="block w-full pl-11 pr-4 py-3.5 border-2 border-slate-200 rounded-2xl bg-slate-50 focus:bg-white focus:outline-none focus:ring-0 focus:border-indigo-500 sm:text-sm transition-all text-slate-900 font-medium placeholder-slate-400 shadow-sm hover:border-slate-300" />
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="submitBtn" class="relative w-full flex justify-center items-center py-4 px-4 border border-transparent rounded-2xl shadow-[0_8px_20px_-6px_rgba(79,70,229,0.5)] text-base font-bold text-white bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all transform hover:-translate-y-0.5 active:translate-y-0 overflow-hidden group">
+                    <span id="btnText" class="tracking-wide">তথ্য খুঁজুন</span>
+                    <svg id="btnSpinner" class="hidden animate-spin ml-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <!-- Button Glow Effect -->
+                    <div class="absolute top-0 -inset-full h-full w-1/2 z-5 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-20 group-hover:animate-shine"></div>
+                </button>
+            </form>
+
+            <!-- Error Message Box -->
+            <div id="errorBox" class="hidden mt-6 p-4 bg-red-50/80 border border-red-100 rounded-2xl text-red-600 text-sm flex items-start backdrop-blur-sm">
+                <svg class="w-5 h-5 mr-3 flex-shrink-0 mt-0.5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                <span id="errorMessage" class="font-medium leading-relaxed"></span>
+            </div>
+        </div>
+
+        <!-- Result Container (Dynamically toggles between Result & Seat Plan) -->
+        <div id="resultContainer" class="hidden border-t border-slate-100 bg-slate-50/50 p-6 sm:p-8">
             
-            <!-- Disclaimer Banner -->
-            <div class="bg-amber-50 border border-amber-100 rounded-xl p-3 flex items-start gap-3">
-                <i class="fas fa-exclamation-triangle text-amber-500 mt-0.5 text-sm"></i>
-                <p class="text-xs text-amber-800 leading-relaxed">
-                    <strong>Unofficial Site:</strong> This is an independent platform created to help candidates find their centers easily. Not affiliated with the exam authority.
-                </p>
+            <!-- Result State (Pass/Fail) -->
+            <div id="passResultContainer" class="hidden text-center slide-up">
+                <div class="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-4 ring-8 ring-green-50">
+                    <svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-800 mb-2">অভিনন্দন!</h3>
+                <p class="text-slate-600 font-medium mb-1">আপনার রোল নম্বরটি ফলাফলের তালিকায় পাওয়া গেছে।</p>
+                <p id="passRollText" class="text-indigo-600 font-bold text-lg mt-2 bg-indigo-50 py-2 px-4 rounded-xl inline-block"></p>
             </div>
 
-            <!-- Exam Details Card -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                <div class="bg-gradient-to-br from-slate-900 to-slate-800 p-6 text-white relative overflow-hidden">
-                    <div class="absolute top-0 right-0 -mt-2 -mr-2 text-white opacity-5 text-6xl">
-                        <i class="fas fa-file-signature"></i>
-                    </div>
-                    <div class="relative z-10">
-                        <span id="examJobId" class="inline-block bg-white/10 backdrop-blur-md text-[10px] font-bold px-2 py-1 rounded mb-3 border border-white/10 uppercase tracking-wide">
-                            Loading...
-                        </span>
-                        <h1 id="examTitle" class="font-bold text-xl sm:text-2xl leading-tight mb-1">Loading...</h1>
-                        <p id="examOrg" class="text-slate-300 text-sm font-medium">Loading...</p>
-                    </div>
+            <!-- Seat Plan State -->
+            <div id="seatPlanContainer" class="hidden slide-up">
+                <div class="flex items-center mb-5">
+                    <span class="w-2 h-6 bg-indigo-500 rounded-full mr-3"></span>
+                    <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider">পরীক্ষার কেন্দ্র</h3>
                 </div>
-                <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 grid grid-cols-2 gap-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0">
-                            <i class="far fa-calendar-alt text-xs"></i>
-                        </div>
-                        <div>
-                            <p class="text-[10px] text-slate-400 font-bold uppercase">Date</p>
-                            <p id="examDate" class="text-slate-700 text-sm font-semibold leading-tight">...</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center flex-shrink-0">
-                            <i class="far fa-clock text-xs"></i>
-                        </div>
-                        <div>
-                            <p class="text-[10px] text-slate-400 font-bold uppercase">Time</p>
-                            <p id="examTime" class="text-slate-700 text-sm font-semibold leading-tight">...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Search Section -->
-            <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/60 p-6 border border-slate-100 relative z-10">
-                <label for="rollInput" class="block text-sm font-bold text-slate-700 mb-3">
-                    Search Seat Location
-                </label>
-                <div class="relative flex items-center group">
-                    <div class="absolute left-4 text-slate-400 group-focus-within:text-primary-500 transition-colors">
-                        <i class="fas fa-id-card"></i>
-                    </div>
-                    <input type="number" id="rollInput" 
-                           class="block w-full pl-11 pr-12 py-4 bg-slate-50 border border-slate-200 rounded-xl text-lg font-medium outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 focus:bg-white transition-all placeholder:text-slate-400"
-                           placeholder="Enter Roll No (e.g. 100250)">
-                    <button onclick="searchSeat()" 
-                            class="absolute right-2 p-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors shadow-md shadow-primary-500/20">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Result Container -->
-            <div id="resultArea" class="hidden"></div>
-
-        </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-white border-t border-slate-200 py-8 mt-auto">
-        <div class="max-w-3xl mx-auto px-6">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-                <div class="text-center md:text-left">
-                    <p class="text-sm font-bold text-slate-700">Seat Plan Portal</p>
-                    <p class="text-xs text-slate-400 mt-1">&copy; 2025 All Rights Reserved.</p>
-                </div>
-                <div class="flex items-center gap-6">
-                    <a href="mailto:bcsinpdf@gmail.com" class="text-slate-500 hover:text-primary-600 text-sm transition-colors flex items-center gap-2">
-                        <i class="fas fa-envelope"></i> Contact Support
-                    </a>
-                    <button onclick="toggleModal('aboutModal')" class="text-slate-500 hover:text-primary-600 text-sm transition-colors">
-                        About
-                    </button>
-                </div>
-            </div>
-            <div class="mt-6 pt-6 border-t border-slate-100 text-center">
-                <p class="text-[10px] text-slate-400 leading-relaxed max-w-lg mx-auto">
-                    Disclaimer: This website uses data extracted from public notices for user convenience. We are not responsible for any unintentional errors. Please verify with your official Admit Card.
-                </p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- About Modal -->
-    <div id="aboutModal" class="fixed inset-0 z-[60] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <!-- Backdrop -->
-        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity opacity-0" id="modalBackdrop" onclick="toggleModal('aboutModal')"></div>
-        
-        <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
-            <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-sm opacity-0 translate-y-4 scale-95" id="modalPanel">
-                <div class="bg-white px-4 pb-4 pt-5 sm:p-6 pb-4">
-                    <div class="sm:flex sm:items-start">
-                        <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-primary-100 sm:mx-0 sm:h-10 sm:w-10">
-                            <i class="fas fa-info text-primary-600"></i>
-                        </div>
-                        <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                            <h3 class="text-base font-semibold leading-6 text-slate-900" id="modal-title">About This Portal</h3>
-                            <div class="mt-2">
-                                <p class="text-sm text-slate-500 mb-4">
-                                    This tool simplifies the process of finding exam centers for competitive exams. It is maintained by volunteers and is not an official government website.
-                                </p>
-                                <p class="text-sm font-semibold text-slate-700">Contact & Feedback:</p>
-                                <a href="mailto:bcsinpdf@gmail.com" class="text-sm text-primary-600 hover:underline break-all">
-                                    bcsinpdf@gmail.com
-                                </a>
+                
+                <div class="space-y-4">
+                    <!-- Center Name & Address -->
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                        <div class="flex items-start">
+                            <div class="bg-blue-50 p-2 rounded-xl mr-4 flex-shrink-0">
+                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                            </div>
+                            <div class="pt-1">
+                                <h4 id="resName" class="font-bold text-slate-900 text-lg leading-tight"></h4>
+                                <p id="resAddress" class="text-slate-500 text-sm mt-1.5 font-medium"></p>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="bg-slate-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                    <button type="button" onclick="toggleModal('aboutModal')" class="inline-flex w-full justify-center rounded-lg bg-slate-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black sm:ml-3 sm:w-auto transition-colors">
-                        Close
-                    </button>
+
+                    <!-- Bus Route Guide -->
+                    <div id="busInfoCard" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                        <div class="flex items-start">
+                            <div class="bg-indigo-50 p-2 rounded-xl mr-4 flex-shrink-0">
+                                <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                            </div>
+                            <div class="pt-1 w-full">
+                                <h4 class="font-bold text-slate-800 text-sm mb-2">যাতায়াতের রুট</h4>
+                                <div class="space-y-1.5 text-sm">
+                                    <div class="flex items-start justify-between bg-slate-50 p-2 rounded-lg">
+                                        <span class="font-semibold text-slate-600 w-16">বাস:</span> 
+                                        <span id="resBusNames" class="text-slate-800 text-right font-medium"></span>
+                                    </div>
+                                    <div class="flex items-start justify-between bg-slate-50 p-2 rounded-lg">
+                                        <span class="font-semibold text-slate-600 w-24">নামার স্থান:</span> 
+                                        <span id="resBusStand" class="text-slate-800 text-right font-medium"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Traffic Alert -->
+                    <div id="trafficCard" class="bg-amber-50/50 p-5 rounded-2xl shadow-sm border border-amber-100">
+                        <div class="flex items-start">
+                            <div class="bg-amber-100 p-2 rounded-xl mr-4 flex-shrink-0">
+                                <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                            </div>
+                            <div class="pt-1">
+                                <h4 class="font-bold text-amber-900 text-sm mb-1.5">ট্রাফিক আপডেট</h4>
+                                <p id="resTraffic" class="text-amber-800 text-sm leading-relaxed font-medium"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hotel List (Dynamically Generated) -->
+                    <div id="hotelCard" class="hidden bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                        <div class="bg-purple-50 p-4 border-b border-purple-100 flex items-center">
+                            <svg class="w-5 h-5 text-purple-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                            <h4 class="font-bold text-purple-900 text-sm">কাছাকাছি সাশ্রয়ী হোটেল</h4>
+                        </div>
+                        <div id="hotelList" class="divide-y divide-slate-100">
+                            <!-- Hotel Items Inject Here -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
 
-    <script>
-        let examData = null;
-
-        // Modal Logic
-        function toggleModal(modalId) {
-            const modal = document.getElementById(modalId);
-            const backdrop = document.getElementById('modalBackdrop');
-            const panel = document.getElementById('modalPanel');
-            
-            if (modal.classList.contains('hidden')) {
-                // Open
-                modal.classList.remove('hidden');
-                // Small delay to allow display:block to apply before opacity transition
-                setTimeout(() => {
-                    backdrop.classList.remove('opacity-0');
-                    panel.classList.remove('opacity-0', 'translate-y-4', 'scale-95');
-                }, 10);
-            } else {
-                // Close
-                backdrop.classList.add('opacity-0');
-                panel.classList.add('opacity-0', 'translate-y-4', 'scale-95');
-                setTimeout(() => {
-                    modal.classList.add('hidden');
-                }, 300); // Wait for transition
-            }
+    <!-- Animation CSS for button shine -->
+    <style>
+        @keyframes shine {
+            100% { left: 125%; }
         }
+        .animate-shine {
+            animation: shine 1.5s infinite;
+        }
+    </style>
 
-        // App Logic
-        document.addEventListener('DOMContentLoaded', async () => {
-            try {
-                const response = await fetch('seat_plan.json');
-                if (!response.ok) throw new Error("JSON not found");
-                examData = await response.json();
-                initApp();
-            } catch (error) {
-                console.log("Using fallback data for preview.");
-                if (typeof fallbackData !== 'undefined') {
-                    examData = fallbackData;
-                    initApp();
-                } else {
-                    document.getElementById('loading').classList.add('hidden');
-                    document.getElementById('error').classList.remove('hidden');
+    <script>
+        // আপনার Google Apps Script API URL
+        const GOOGLE_SHEET_API = 'https://script.google.com/macros/s/AKfycbxi7pNJPsjqwT-FO5TEac0PnAPGPiYYZLxHvjhGoz5Eueca3U4wpRBNtRmDxX6nZD1x/exec';
+
+        // DOM Elements
+        const selectEl = document.getElementById('examSelect');
+        const form = document.getElementById('searchForm');
+        const rollInput = document.getElementById('rollNumber');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const btnSpinner = document.getElementById('btnSpinner');
+        
+        const resultContainer = document.getElementById('resultContainer');
+        const errorBox = document.getElementById('errorBox');
+        const errorMessage = document.getElementById('errorMessage');
+
+        const passResultContainer = document.getElementById('passResultContainer');
+        const passRollText = document.getElementById('passRollText');
+
+        const seatPlanContainer = document.getElementById('seatPlanContainer');
+        const resName = document.getElementById('resName');
+        const resAddress = document.getElementById('resAddress');
+        const busInfoCard = document.getElementById('busInfoCard');
+        const resBusNames = document.getElementById('resBusNames');
+        const resBusStand = document.getElementById('resBusStand');
+        const trafficCard = document.getElementById('trafficCard');
+        const resTraffic = document.getElementById('resTraffic');
+        const hotelCard = document.getElementById('hotelCard');
+        const hotelList = document.getElementById('hotelList');
+
+        // Fetch with Timeout & Smart Retry
+        async function fetchWithTimeoutAndRetry(url, retries = 2, backoff = 1000, timeoutDuration = 6000, fetchOptions = {}) {
+            for (let i = 0; i < retries; i++) {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), timeoutDuration);
+
+                try {
+                    const options = { ...fetchOptions, signal: controller.signal };
+                    const response = await fetch(url, options);
+                    clearTimeout(timeoutId); 
+                    
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    
+                    const textData = await response.text();
+                    
+                    // Smart detection: If Google sends HTML login page instead of JSON
+                    if (textData.trim().startsWith('<') && textData.toLowerCase().includes('html')) {
+                        throw new Error("GOOGLE_SCRIPT_AUTH_ERROR");
+                    }
+                    
+                    try {
+                        return JSON.parse(textData);
+                    } catch (parseError) {
+                        throw new Error("Invalid JSON Data Received");
+                    }
+                } catch (err) {
+                    clearTimeout(timeoutId);
+                    if (i === retries - 1) throw err;
+                    await new Promise(resolve => setTimeout(resolve, backoff));
                 }
             }
-        });
-
-        function initApp() {
-            document.getElementById('examTitle').textContent = examData.examTitle;
-            document.getElementById('examOrg').textContent = examData.organization;
-            document.getElementById('examJobId').textContent = `Job ID: ${examData.jobId}`;
-            document.getElementById('examDate').textContent = examData.examDate;
-            document.getElementById('examTime').textContent = examData.examTime;
-
-            document.getElementById('loading').classList.add('hidden');
-            document.getElementById('appContent').classList.remove('hidden');
         }
 
-        function searchSeat() {
-            if (!examData) return;
+        // Initialize App (Load Dropdown)
+        async function initApp() {
+            selectEl.innerHTML = '<option value="" disabled selected>পরীক্ষার তালিকা লোড হচ্ছে...</option>'; 
+            selectEl.disabled = true;
 
-            const input = document.getElementById('rollInput');
-            const resultArea = document.getElementById('resultArea');
-            const roll = parseInt(input.value);
+            try {
+                let data;
+                try {
+                    // Step 1: Try Direct Fetch
+                    data = await fetchWithTimeoutAndRetry(GOOGLE_SHEET_API, 1, 1000, 8000);
+                } catch (directError) {
+                    // Step 2: Fallback to Cloudflare Worker Proxy if CORS blocks it
+                    console.warn("Direct fetch failed, falling back to proxy...", directError);
+                    const proxyApiUrl = 'https://migration-worker.contacttomizanur.workers.dev/?url=' + encodeURIComponent(GOOGLE_SHEET_API);
+                    data = await fetchWithTimeoutAndRetry(proxyApiUrl, 2, 1000, 8000);
+                }
 
-            if (!roll) {
-                input.focus();
-                input.parentElement.classList.add('translate-x-1');
-                setTimeout(() => input.parentElement.classList.remove('translate-x-1'), 100);
+                selectEl.innerHTML = '<option value="" disabled selected>পরীক্ষা নির্বাচন করুন</option>'; 
+                
+                if (!data || data.length === 0) {
+                    selectEl.innerHTML = '<option value="">কোনো পরীক্ষা পাওয়া যায়নি</option>';
+                    return;
+                }
+
+                data.forEach(exam => {
+                    const title = exam.title || exam[0];
+                    const url = exam.url || exam.jsonUrl || exam[1] || exam[8]; 
+
+                    if (title && url && url.includes('.json')) {
+                        const option = document.createElement('option');
+                        option.value = url; 
+                        option.textContent = title; 
+                        selectEl.appendChild(option);
+                    }
+                });
+                
+                selectEl.disabled = false;
+            } catch (error) {
+                console.error("Fetch API error:", error);
+                selectEl.innerHTML = '<option value="">তালিকা লোড করতে ব্যর্থ</option>';
+                
+                // এখন অ্যাপটি নির্দিষ্ট করে বলে দিবে সমস্যাটি কোথায়
+                if (error.message === "GOOGLE_SCRIPT_AUTH_ERROR") {
+                    showError("গুগল স্ক্রিপ্ট পারমিশন এরর: 'Execute as' অপশনটি 'Me' তে এবং 'Version' অপশনটি 'New version' এ সেট করে পুনরায় Deploy করুন।");
+                } else {
+                    showError(`ডেটা কানেকশন এরর: ${error.message}। ইন্টারনেট চেক করুন অথবা API লিংকের ভার্সন আপডেট করুন।`);
+                }
+            }
+        }
+
+        function setLoading(isLoading) {
+            submitBtn.disabled = isLoading;
+            if (isLoading) {
+                btnText.textContent = 'তথ্য খোঁজা হচ্ছে...';
+                btnSpinner.classList.remove('hidden');
+                resultContainer.classList.add('hidden');
+                errorBox.classList.add('hidden');
+            } else {
+                btnText.textContent = 'তথ্য খুঁজুন';
+                btnSpinner.classList.add('hidden');
+            }
+        }
+
+        function showError(msg) {
+            errorMessage.textContent = msg;
+            errorBox.classList.remove('hidden');
+            errorBox.classList.add('slide-up');
+        }
+
+        function displayPassResult(roll) {
+            seatPlanContainer.classList.add('hidden');
+            passResultContainer.classList.remove('hidden');
+            passRollText.textContent = `রোল: ${roll}`;
+            
+            resultContainer.classList.remove('hidden');
+            resultContainer.classList.add('slide-up');
+        }
+
+        function displaySeatPlan(center) {
+            passResultContainer.classList.add('hidden');
+            seatPlanContainer.classList.remove('hidden');
+
+            // Name & Address
+            resName.textContent = center.name || center.Name || center.center_name || 'নাম দেওয়া নেই';
+            resAddress.textContent = center.address || center.Address || center.center_address || 'ঠিকানা দেওয়া নেই';
+            
+            // Bus Route
+            const mentorGuide = center.mentor_guide || center.Mentor_Guide || center.guide;
+            if (mentorGuide && (mentorGuide.bus_names || mentorGuide.bus_stand)) {
+                busInfoCard.classList.remove('hidden');
+                resBusNames.textContent = mentorGuide.bus_names || mentorGuide.Bus_Names || mentorGuide.bus || 'তথ্য নেই';
+                resBusStand.textContent = mentorGuide.bus_stand || mentorGuide.Bus_Stand || mentorGuide.stand || 'তথ্য নেই';
+            } else {
+                busInfoCard.classList.add('hidden');
+            }
+            
+            // Traffic
+            const trafficInfo = center.traffic_info || center.Traffic_Info || center.traffic;
+            if (trafficInfo) {
+                trafficCard.classList.remove('hidden');
+                resTraffic.textContent = trafficInfo;
+            } else {
+                trafficCard.classList.add('hidden');
+            }
+
+            // Hotels
+            const hotels = center.affordable_hotels || center.hotels || center.affordableHotels;
+            if (hotels && Array.isArray(hotels) && hotels.length > 0) {
+                hotelCard.classList.remove('hidden');
+                hotelList.innerHTML = ''; // Clear old data
+                hotels.forEach(hotel => {
+                    const priceBadge = hotel.price ? `<span class="bg-green-100 text-green-700 text-xs font-bold px-2.5 py-1 rounded-full">${hotel.price}</span>` : '';
+                    const genderBadge = hotel.gender ? `<span class="bg-purple-100 text-purple-700 text-xs font-bold px-2 py-1 rounded-md ml-2">${hotel.gender}</span>` : '';
+                    
+                    hotelList.innerHTML += `
+                        <div class="p-4 hover:bg-slate-50 transition-colors">
+                            <div class="flex justify-between items-start mb-1.5">
+                                <h5 class="font-bold text-slate-800 text-sm">${hotel.name || 'হোটেলের নাম নেই'}</h5>
+                                ${priceBadge}
+                            </div>
+                            <div class="flex items-center text-xs text-slate-500 font-medium">
+                                <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                ${hotel.location || 'ঠিকানা নেই'}
+                                ${genderBadge}
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                hotelCard.classList.add('hidden');
+            }
+
+            resultContainer.classList.remove('hidden');
+            resultContainer.classList.add('slide-up');
+        }
+
+        // Handle Search Logic
+        async function handleSearch(e) {
+            e.preventDefault();
+            const rollInputVal = rollInput.value.trim();
+            const roll = parseInt(rollInputVal, 10);
+            const jsonUrl = selectEl.value; 
+
+            if (!jsonUrl) {
+                showError("অনুগ্রহ করে ড্রপডাউন থেকে একটি পরীক্ষা নির্বাচন করুন।");
+                return;
+            }
+            if (isNaN(roll)) {
+                showError("অনুগ্রহ করে একটি সঠিক সংখ্যার রোল নম্বর প্রদান করুন।");
                 return;
             }
 
-            resultArea.classList.add('hidden');
-            resultArea.innerHTML = '';
-            
-            const found = examData.centers.find(c => roll >= c.startRoll && roll <= c.endRoll);
+            setLoading(true);
 
-            setTimeout(() => {
-                resultArea.classList.remove('hidden');
+            try {
+                // Fetch JSON using custom Cloudflare Proxy
+                const proxyUrl = 'https://migration-worker.contacttomizanur.workers.dev/?url=' + encodeURIComponent(jsonUrl);
+                const data = await fetchWithTimeoutAndRetry(proxyUrl, 3, 1000, 8000);
                 
-                if (found) {
-                    const mapQuery = encodeURIComponent(found.center + " " + found.address);
-                    const mapLink = `https://www.google.com/maps/search/?api=1&query=${mapQuery}`;
-
-                    resultArea.innerHTML = `
-                        <div class="animate-slide-up">
-                            <div class="bg-white rounded-2xl overflow-hidden shadow-lg border border-primary-100 ring-4 ring-primary-50">
-                                <div class="bg-primary-600 px-5 py-4 flex justify-between items-center">
-                                    <div class="text-white font-bold flex items-center gap-2">
-                                        <i class="fas fa-check-circle"></i> Seat Found
-                                    </div>
-                                    <span class="bg-white/20 text-white text-xs font-mono font-bold px-2 py-1 rounded">
-                                        Roll: ${roll}
-                                    </span>
-                                </div>
-                                <div class="p-6">
-                                    <div class="flex items-start gap-4 mb-5">
-                                        <div class="w-10 h-10 rounded-full bg-primary-50 text-primary-600 flex items-center justify-center flex-shrink-0 text-lg">
-                                            <i class="fas fa-school"></i>
-                                        </div>
-                                        <div>
-                                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Exam Center</p>
-                                            <h3 class="text-lg font-bold text-slate-900 leading-snug">${found.center}</h3>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="flex items-start gap-4 mb-6">
-                                        <div class="w-10 h-10 rounded-full bg-slate-50 text-slate-500 flex items-center justify-center flex-shrink-0 text-lg">
-                                            <i class="fas fa-map-marked-alt"></i>
-                                        </div>
-                                        <div>
-                                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Address</p>
-                                            <p class="text-slate-600 font-medium text-sm leading-relaxed">${found.address}</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="flex items-center gap-4 mb-6 bg-slate-50 p-3 rounded-lg border border-slate-100">
-                                        <div class="w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center flex-shrink-0 text-sm">
-                                            <i class="fas fa-list-ol"></i>
-                                        </div>
-                                        <div>
-                                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Roll Range</p>
-                                            <p class="text-slate-700 font-mono font-medium text-sm">
-                                                ${found.startRoll} - ${found.endRoll}
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <a href="${mapLink}" target="_blank" 
-                                       class="group flex w-full bg-slate-900 hover:bg-black text-white text-center font-semibold py-3.5 rounded-xl transition-all shadow-md items-center justify-center gap-2">
-                                        <span>Open in Google Maps</span>
-                                        <i class="fas fa-external-link-alt text-xs opacity-50 group-hover:opacity-100 transition-opacity"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    resultArea.innerHTML = `
-                        <div class="bg-red-50 rounded-2xl p-8 text-center border border-red-100 animate-slide-up">
-                            <div class="w-14 h-14 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <i class="fas fa-search-minus text-xl"></i>
-                            </div>
-                            <h3 class="font-bold text-slate-800 text-lg">No Seat Found</h3>
-                            <p class="text-sm text-slate-500 mt-2 leading-relaxed">
-                                We couldn't locate roll number <span class="font-bold font-mono text-slate-700">${roll}</span> in this seat plan.
-                            </p>
-                            <p class="text-xs text-slate-400 mt-4">Please check your admit card and try again.</p>
-                        </div>
-                    `;
+                let parseData = data;
+                
+                // Handle nested wrapper like { "data": [...] } or { "centers": [...] }
+                if (parseData && typeof parseData === 'object' && !Array.isArray(parseData)) {
+                    const nestedArray = Object.values(parseData).find(val => Array.isArray(val));
+                    if (nestedArray) {
+                        parseData = nestedArray;
+                    }
                 }
-            }, 300);
+
+                setLoading(false);
+
+                // --- LOGIC 1: RESULT LIST (Array of Strings/Numbers) ---
+                if (Array.isArray(parseData) && (typeof parseData[0] === 'string' || typeof parseData[0] === 'number')) {
+                    const isPassed = parseData.some(item => item.toString() === rollInputVal);
+                    if (isPassed) {
+                        displayPassResult(rollInputVal);
+                    } else {
+                        showError(`দুঃখিত, আপনার রোল নম্বর (${rollInputVal}) ফলাফলের তালিকায় পাওয়া যায়নি।`);
+                    }
+                    return;
+                }
+
+                // --- LOGIC 2: SEAT PLAN (Array of Objects) ---
+                if (Array.isArray(parseData) && typeof parseData[0] === 'object') {
+                    const foundCenter = parseData.find(center => {
+                        const startStr = center.start_roll || center.Start_Roll || center.startRoll || center.start || center.Start;
+                        const endStr = center.end_roll || center.End_Roll || center.endRoll || center.end || center.End;
+                        
+                        if (!startStr || !endStr) return false;
+
+                        const start = parseInt(startStr.toString().replace(/,/g, '').trim(), 10);
+                        const end = parseInt(endStr.toString().replace(/,/g, '').trim(), 10);
+                        
+                        return roll >= start && roll <= end;
+                    });
+
+                    if (foundCenter) {
+                        displaySeatPlan(foundCenter);
+                    } else {
+                        showError(`আপনার রোল নম্বর ${roll} এর জন্য কোনো কেন্দ্র পাওয়া যায়নি। অ্যাডমিট কার্ড চেক করুন।`);
+                    }
+                    return;
+                }
+
+                showError("ডেটার ফরমেট সঠিক নয়। সার্ভারে কোনো সমস্যা হতে পারে।");
+
+            } catch (error) {
+                console.error("Data Load Error:", error);
+                setLoading(false);
+                
+                if(error.name === 'AbortError' || error.message.includes('Timeout')) {
+                    showError("সার্ভার রেসপন্স করছে না। ইন্টারনেট কানেকশন চেক করে কিছুক্ষণ পর আবার চেষ্টা করুন।");
+                } else if(error.message === "GOOGLE_SCRIPT_AUTH_ERROR") {
+                    showError("JSON সার্ভারে লগিন সমস্যা আছে। এটি পাবলিকলি অ্যাক্সেস করা যাচ্ছে না।");
+                } else if(error.message.includes('Invalid JSON')) {
+                    showError("সঠিক ডেটা পাওয়া যায়নি বা পরীক্ষাটি আর সার্ভারে নেই।");
+                } else {
+                    showError("ডেটা লোড করা যাচ্ছে না। দয়া করে কিছুক্ষণ পর আবার চেষ্টা করুন।");
+                }
+            }
         }
 
-        // Enter Key Listener
-        document.getElementById('rollInput').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') searchSeat();
-        });
-
-        // Fallback Data (For immediate preview in this chat)
-        const fallbackData = {
-          "examTitle": "Senior Officer (General)",
-          "organization": "Bankers' Selection Committee",
-          "jobId": "10220",
-          "examDate": "Friday, 05 Dec 2025",
-          "examTime": "10:00 AM - 11:00 AM",
-          "centers": [
-            { "center": "A. K. School & College (Main Campus)", "address": "Dania, Jatrabari, Dhaka-1236", "startRoll": 100002, "endRoll": 104010 },
-            { "center": "A. K. School & College (New Campus)", "address": "Dania, Jatrabari, Dhaka-1236", "startRoll": 104011, "endRoll": 106252 },
-            { "center": "Barnamala Adarsha High School and College", "address": "Dania, Jatrabari, Dhaka-1236", "startRoll": 106255, "endRoll": 110649 },
-            { "center": "Dania College", "address": "Dania, Jatrabari, Dhaka-1236", "startRoll": 110650, "endRoll": 118604 },
-            { "center": "Dr. Mahbubur Rahman Molla College", "address": "Matuail, Demra Road, Jatrabari, Dhaka-1362", "startRoll": 118606, "endRoll": 128594 },
-            { "center": "Jatrabari Ideal School & College", "address": "Jatrabari, Dhaka-1204", "startRoll": 128595, "endRoll": 132357 },
-            { "center": "Ahmed Bawany Academy School & College", "address": "3-5, K P Ghosh Street, Armanitola, Babubazar, Dhaka-1100", "startRoll": 132358, "endRoll": 137313 },
-            { "center": "Armanitola Government High School", "address": "Armanitola, Dhaka-1100", "startRoll": 137314, "endRoll": 140468 },
-            { "center": "K.L Jubilee School & College", "address": "Banglabazar, Dhaka-1100", "startRoll": 140469, "endRoll": 142997 },
-            { "center": "Fazlul Haque Mohila College", "address": "12, Akashay Das Lane, Gandaria, Dhaka-1204", "startRoll": 142998, "endRoll": 146806 },
-            { "center": "Kabi Nazrul Govt. College", "address": "1 No, Municipality Street, Dhaka", "startRoll": 146807, "endRoll": 150572 },
-            { "center": "Dhaka Mohanagar Mohila College", "address": "6 No Suvash Bosh Avenue, Luxmibazar, Dhaka-1100", "startRoll": 150574, "endRoll": 155002 },
-            { "center": "Motijheel Model School and College (Motijheel Branch)", "address": "Motijheel, Dhaka-1000", "startRoll": 155003, "endRoll": 162551 },
-            { "center": "Motijheel Govt. Girls' High School", "address": "Outer Circular Rd, Dhaka, Opposite Islami Bank Hospital, Motijheel, Dhaka-1000", "startRoll": 162552, "endRoll": 165055 },
-            { "center": "Motijheel Colony High School", "address": "Motijheel, Dhaka-1000", "startRoll": 165056, "endRoll": 167935 },
-            { "center": "Central Womens College", "address": "13/2, Abhay Das Ln, Dhaka 1203", "startRoll": 167936, "endRoll": 171316 },
-            { "center": "Ali Ahmed School & College", "address": "South Goran, Khigaon, Dhaka-1219", "startRoll": 171317, "endRoll": 174412 },
-            { "center": "Khilgaon Girls' School and College", "address": "Khilgaon, Dhaka-1219", "startRoll": 174414, "endRoll": 178781 },
-            { "center": "Khilgaon Govt. High School", "address": "Khilgaon, Dhaka-1219", "startRoll": 178782, "endRoll": 181892 },
-            { "center": "Khilgaon Model College", "address": "Block-C, 721/1, Khilgaon, Chowrasta, Dhaka 1219", "startRoll": 181893, "endRoll": 186246 },
-            { "center": "Model High School Khilgaon", "address": "Shahid Baki Road, 411/A Khilgaon, Dhaka-1219", "startRoll": 186248, "endRoll": 188792 },
-            { "center": "Sabujbagh Government College", "address": "70/3 South Basabo (Near Balur Mat), Sabujbagh, Dhaka-1214", "startRoll": 188793, "endRoll": 192541 },
-            { "center": "Kadamtala Purba Basabo School & College", "address": "Basabo, Dhaka-1214", "startRoll": 192542, "endRoll": 197034 },
-            { "center": "Shyampur Bohumuki High School & College", "address": "Shyampur, Kadamtola, Dhaka-1204", "startRoll": 197035, "endRoll": 199793 },
-            { "center": "Mirpur Bangla School and College (Boys Section)", "address": "Section 11, Pallabi, Dhaka-1216", "startRoll": 199794, "endRoll": 204216 },
-            { "center": "Mirpur Bangla School and College (Girls' Section)", "address": "Section 06, Pallabi, Dhaka-1216", "startRoll": 204217, "endRoll": 206377 },
-            { "center": "Kalshi Islamia High School", "address": "11 E Kalshi Rd, (Pallabi), Dhaka 1216", "startRoll": 206378, "endRoll": 209718 },
-            { "center": "Mirpur College", "address": "Mirpur-2, Dhaka-1216", "startRoll": 209719, "endRoll": 214802 },
-            { "center": "Mirpur Girls Ideal College", "address": "Mirpur-10, Pallabi, Dhaka-1216", "startRoll": 214803, "endRoll": 219219 },
-            { "center": "Mirpur Girls Ideal Laboratory Institute", "address": "Mirpur-10, Dhaka-1216", "startRoll": 219220, "endRoll": 223642 },
-            { "center": "Govt. Rupnagar Model School & College", "address": "Road No-16, Rupnagar R/A Mirpur Dhaka-1216", "startRoll": 223645, "endRoll": 226809 },
-            { "center": "Greenfield School & College", "address": "Mirpur-10, Dhaka-1216", "startRoll": 226810, "endRoll": 229281 },
-            { "center": "Dhaka Commerce College", "address": "Dhaka Commerce College Road, Mirpur, Dhaka-1216", "startRoll": 229283, "endRoll": 234949 },
-            { "center": "Mogbazar Girls High School", "address": "52, Siddheswari, Ramna, Dhaka-1217", "startRoll": 234950, "endRoll": 238431 },
-            { "center": "Siddheswari College", "address": "25, Shahid Shangbadik Selina Parveen Sarak, Moghbazar, Dhaka-1217", "startRoll": 238432, "endRoll": 242847 },
-            { "center": "Siddheswari Girls' College", "address": "148, New Baily Rd, Dhaka-1000", "startRoll": 242848, "endRoll": 247584 },
-            { "center": "Govt. Science College", "address": "446, Tejgaon Shilpa Alaka, Dhaka-1208", "startRoll": 247585, "endRoll": 251117 },
-            { "center": "Mohakhali Model High School", "address": "Mohakhali School Rd, Dhaka 1212", "startRoll": 251118, "endRoll": 253954 },
-            { "center": "Tejgaon Adarsha School & College", "address": "446 Bir Uttam Mir Shawkat Sarak, Dhaka 1208", "startRoll": 253956, "endRoll": 257716 },
-            { "center": "Dhanmondi Government Girls High School", "address": "Dhanmondi R/A, Dhaka-1209", "startRoll": 257717, "endRoll": 260236 },
-            { "center": "Dhanmondi Govt. Boys High School", "address": "27 Mirpur Rd, Dhaka-1207", "startRoll": 260239, "endRoll": 263767 },
-            { "center": "Kisholoy Girls School and College", "address": "7 Tajmahal Rd, Dhaka-1207", "startRoll": 263768, "endRoll": 266270 },
-            { "center": "Mohammadpur Govt. College", "address": "Satmosjid Road, Mohammadpur Dhaka-1207", "startRoll": 266271, "endRoll": 268786 },
-            { "center": "Mohammadpur Kendriya College", "address": "312/3, Noorjahan Road, Mohammadpur, Dhaka-1207", "startRoll": 268787, "endRoll": 273113 },
-            { "center": "Badsha Faisal Institute", "address": "Ring Road, Shaymoly, Dhaka-1207", "startRoll": 273114, "endRoll": 275654 },
-            { "center": "Lalmatia Girls' High School & College", "address": "9/15 Block # D, Lalmatia, Mohammadpur, Dhaka-1207", "startRoll": 275655, "endRoll": 278791 },
-            { "center": "Anandamoyee Girls' High School", "address": "17/18 Kazimuddin Siddiqui Lane, Armanitola, Dhaka - 1100", "startRoll": 278792, "endRoll": 282254 },
-            { "center": "Agargon Taltola Govt. Colony High School and College", "address": "Sher-e-Bangla Nagar, Dhaka-1207", "startRoll": 282255, "endRoll": 285400 },
-            { "center": "Anwara Begum Muslim Girls High School And College", "address": "13 Nazimuddin Road, Dhaka-1100", "startRoll": 285401, "endRoll": 288538 },
-            { "center": "Shaikh Borhanuddin Post Graduate College", "address": "62, Nazimuddin Road, Dhaka-1100", "startRoll": 288539, "endRoll": 291676 },
-            { "center": "Segun Bagicha High School", "address": "26, 1 Topkhana Road, Dhaka-1000", "startRoll": 291677, "endRoll": 294180 },
-            { "center": "Azimpur Govt. Girls School & College", "address": "Azimpur, Dhaka-1205", "startRoll": 294181, "endRoll": 298716 }
-          ]
-        };
+        form.addEventListener('submit', handleSearch);
+        initApp();
     </script>
 </body>
 </html>
-
-
