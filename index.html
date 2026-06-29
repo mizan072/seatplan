@@ -267,13 +267,13 @@
             try {
                 let data;
                 try {
-                    // Step 1: Try Direct Fetch
-                    data = await fetchWithTimeoutAndRetry(GOOGLE_SHEET_API, 1, 1000, 8000);
+                    // Step 1: Try Direct Fetch (রিডাইরেক্ট ফলো করা হলো)
+                    data = await fetchWithTimeoutAndRetry(GOOGLE_SHEET_API, 1, 1000, 8000, { redirect: "follow" });
                 } catch (directError) {
                     // Step 2: Fallback to Cloudflare Worker Proxy if CORS blocks it
                     console.warn("Direct fetch failed, falling back to proxy...", directError);
                     const proxyApiUrl = 'https://migration-worker.contacttomizanur.workers.dev/?url=' + encodeURIComponent(GOOGLE_SHEET_API);
-                    data = await fetchWithTimeoutAndRetry(proxyApiUrl, 2, 1000, 8000);
+                    data = await fetchWithTimeoutAndRetry(proxyApiUrl, 2, 1000, 8000, { redirect: "follow" });
                 }
 
                 selectEl.innerHTML = '<option value="" disabled selected>পরীক্ষা নির্বাচন করুন</option>'; 
@@ -300,7 +300,7 @@
                 console.error("Fetch API error:", error);
                 selectEl.innerHTML = '<option value="">তালিকা লোড করতে ব্যর্থ</option>';
                 
-                // এখন অ্যাপটি নির্দিষ্ট করে বলে দিবে সমস্যাটি কোথায়
+                // Specific Error Guidance
                 if (error.message === "GOOGLE_SCRIPT_AUTH_ERROR") {
                     showError("গুগল স্ক্রিপ্ট পারমিশন এরর: 'Execute as' অপশনটি 'Me' তে এবং 'Version' অপশনটি 'New version' এ সেট করে পুনরায় Deploy করুন।");
                 } else {
@@ -416,7 +416,7 @@
             try {
                 // Fetch JSON using custom Cloudflare Proxy
                 const proxyUrl = 'https://migration-worker.contacttomizanur.workers.dev/?url=' + encodeURIComponent(jsonUrl);
-                const data = await fetchWithTimeoutAndRetry(proxyUrl, 3, 1000, 8000);
+                const data = await fetchWithTimeoutAndRetry(proxyUrl, 3, 1000, 8000, { redirect: "follow" });
                 
                 let parseData = data;
                 
