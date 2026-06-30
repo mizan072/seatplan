@@ -2,7 +2,7 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>স্মার্ট সিট ও রেজাল্ট ফাইন্ডার</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -25,8 +25,6 @@
                             500: '#3b82f6',
                             600: '#2563eb',
                             700: '#1d4ed8',
-                            800: '#1e40af',
-                            900: '#1e3a8a',
                         }
                     }
                 }
@@ -56,12 +54,12 @@
             to { opacity: 1; transform: scale(1); }
         }
 
-        ::-webkit-scrollbar { width: 6px; }
+        /* Clean Scrollbar */
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-
-        /* Custom Skeleton for Grid */
+        
+        /* Skeleton Animation */
         .skeleton {
             background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
             background-size: 200% 100%;
@@ -72,7 +70,6 @@
             100% { background-position: -200% 0; }
         }
 
-        /* Modal Backdrop Blur */
         .modal-backdrop {
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
@@ -83,245 +80,243 @@
 
     <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <!-- Logo -->
-                <div class="flex items-center cursor-pointer">
-                    <div class="bg-brand-600 p-2 rounded-lg mr-3">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="flex justify-center items-center h-16">
+                <!-- Logo Center Aligned -->
+                <div class="flex items-center cursor-pointer" onclick="window.location.reload()">
+                    <div class="bg-brand-600 p-2 rounded-lg mr-3 shadow-sm">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                         </svg>
                     </div>
                     <div>
-                        <h1 class="text-xl font-bold text-slate-900 leading-tight">জব পোর্টাল বিডি</h1>
-                        <p class="text-xs text-slate-500 font-semibold">সিট প্ল্যান ও রেজাল্ট ফাইন্ডার</p>
+                        <h1 class="text-xl font-bold text-slate-900 leading-tight">স্মার্ট ফাইন্ডার</h1>
                     </div>
                 </div>
-                <!-- Navigation (Desktop) -->
-                <nav class="hidden md:flex space-x-8">
-                    <a href="#" class="text-brand-600 font-semibold border-b-2 border-brand-600 pb-5 pt-5">হোম</a>
-                    <a href="#" class="text-slate-500 hover:text-slate-800 font-medium pb-5 pt-5 transition-colors">নোটিশ বোর্ড</a>
-                    <a href="#" class="text-slate-500 hover:text-slate-800 font-medium pb-5 pt-5 transition-colors">যোগাযোগ</a>
-                </nav>
             </div>
         </div>
     </header>
 
-    <main class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         
         <!-- Welcome Section -->
-        <div class="mb-8 text-center md:text-left">
-            <h2 class="text-3xl font-bold text-slate-900 mb-2">পরীক্ষার তথ্য খুঁজুন</h2>
-            <p class="text-slate-600 text-lg">আপনার কাঙ্ক্ষিত পরীক্ষা নির্বাচন করে তাৎক্ষণিকভাবে সিট প্ল্যান বা ফলাফল দেখুন।</p>
+        <div class="mb-6 text-center">
+            <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">পরীক্ষার তথ্য খুঁজুন</h2>
+            <p class="text-slate-600 text-base sm:text-lg max-w-2xl mx-auto">আপনার কাঙ্ক্ষিত পরীক্ষা নির্বাচন করে তাৎক্ষণিকভাবে সিট প্ল্যান বা ফলাফল দেখুন।</p>
         </div>
 
-        <!-- Custom Tabs -->
-        <div class="border-b border-slate-200 mb-6">
-            <nav class="-mb-px flex space-x-6 sm:space-x-8" aria-label="Tabs">
-                <button id="tabSeatPlan" onclick="switchTab('seatplan')" class="tab-btn w-1/2 sm:w-auto border-brand-600 text-brand-600 whitespace-nowrap py-4 px-1 border-b-2 font-bold text-lg transition-colors">
-                    সিট প্ল্যান সমূহ <span id="countSeatPlan" class="ml-2 bg-brand-100 text-brand-700 py-0.5 px-2.5 rounded-full text-sm">০</span>
+        <!-- Custom Tabs (Mobile Responsive) -->
+        <div class="border-b border-slate-200 mb-6 overflow-x-auto">
+            <nav class="flex space-x-2 sm:space-x-8 min-w-full sm:min-w-0" aria-label="Tabs">
+                <button id="tabSeatPlan" onclick="switchTab('seatplan')" class="tab-btn flex-1 sm:flex-none border-brand-600 text-brand-600 whitespace-nowrap py-3 sm:py-4 px-2 sm:px-1 border-b-2 font-bold text-base sm:text-lg transition-colors">
+                    সিট প্ল্যান <span id="countSeatPlan" class="ml-1 sm:ml-2 bg-brand-100 text-brand-700 py-0.5 px-2 rounded-full text-xs sm:text-sm">০</span>
                 </button>
-                <button id="tabResult" onclick="switchTab('result')" class="tab-btn w-1/2 sm:w-auto border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 whitespace-nowrap py-4 px-1 border-b-2 font-bold text-lg transition-colors">
-                    ফলাফল সমূহ <span id="countResult" class="ml-2 bg-slate-100 text-slate-600 py-0.5 px-2.5 rounded-full text-sm">০</span>
+                <button id="tabResult" onclick="switchTab('result')" class="tab-btn flex-1 sm:flex-none border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 whitespace-nowrap py-3 sm:py-4 px-2 sm:px-1 border-b-2 font-bold text-base sm:text-lg transition-colors">
+                    ফলাফল <span id="countResult" class="ml-1 sm:ml-2 bg-slate-100 text-slate-600 py-0.5 px-2 rounded-full text-xs sm:text-sm">০</span>
                 </button>
             </nav>
         </div>
 
-        <!-- Grid Containers -->
-        <div class="min-h-[400px] relative">
+        <div class="min-h-[300px] relative">
             
             <!-- Global Loader (Skeletons) -->
-            <div id="gridLoader" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 absolute inset-0 z-10 bg-[#f8fafc]">
-                <div class="skeleton h-32 rounded-2xl"></div>
-                <div class="skeleton h-32 rounded-2xl"></div>
-                <div class="skeleton h-32 rounded-2xl"></div>
-                <div class="skeleton h-32 rounded-2xl hidden sm:block"></div>
-                <div class="skeleton h-32 rounded-2xl hidden lg:block"></div>
-                <div class="skeleton h-32 rounded-2xl hidden lg:block"></div>
+            <div id="gridLoader" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 absolute inset-0 z-10 bg-[#f8fafc]">
+                <div class="skeleton h-28 rounded-2xl"></div>
+                <div class="skeleton h-28 rounded-2xl"></div>
+                <div class="skeleton h-28 rounded-2xl"></div>
+                <div class="skeleton h-28 rounded-2xl hidden sm:block"></div>
+                <div class="skeleton h-28 rounded-2xl hidden lg:block"></div>
+                <div class="skeleton h-28 rounded-2xl hidden lg:block"></div>
             </div>
 
             <!-- Error State for Grid -->
-            <div id="gridError" class="hidden flex-col items-center justify-center py-16 text-center">
+            <div id="gridError" class="hidden flex-col items-center justify-center py-12 text-center">
                 <div class="bg-red-50 p-4 rounded-full mb-4">
                     <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                 </div>
-                <h3 class="text-xl font-bold text-slate-800 mb-2">ডেটা লোড করতে ব্যর্থ</h3>
-                <p id="gridErrorMsg" class="text-slate-500 max-w-md mx-auto"></p>
-                <button onclick="initApp()" class="mt-5 px-6 py-2.5 bg-white border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50 font-semibold transition-colors">পুনরায় চেষ্টা করুন</button>
+                <h3 class="text-lg sm:text-xl font-bold text-slate-800 mb-2">ডেটা লোড করতে ব্যর্থ</h3>
+                <p id="gridErrorMsg" class="text-slate-500 text-sm sm:text-base max-w-xs mx-auto"></p>
+                <button onclick="initApp()" class="mt-4 px-5 py-2 bg-white border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50 font-bold transition-colors shadow-sm">পুনরায় চেষ্টা করুন</button>
             </div>
 
             <!-- Empty State -->
-            <div id="gridEmpty" class="hidden flex-col items-center justify-center py-16 text-center fade-in">
-                <div class="bg-slate-100 p-5 rounded-full mb-4">
-                    <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
+            <div id="gridEmpty" class="hidden flex-col items-center justify-center py-12 text-center fade-in">
+                <div class="bg-slate-100 p-4 rounded-full mb-4">
+                    <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
                 </div>
-                <h3 class="text-xl font-bold text-slate-800">কোনো তথ্য পাওয়া যায়নি</h3>
+                <h3 class="text-lg sm:text-xl font-bold text-slate-800">কোনো তথ্য পাওয়া যায়নি</h3>
+                <p class="text-slate-500 text-sm mt-1">নতুন তথ্যের জন্য অপেক্ষা করুন।</p>
             </div>
 
             <!-- Seat Plan Grid -->
-            <div id="seatPlanGrid" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 fade-in pb-10">
+            <div id="seatPlanGrid" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 fade-in pb-8">
                 <!-- Injected via JS -->
             </div>
 
             <!-- Result Grid -->
-            <div id="resultGrid" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 fade-in pb-10">
+            <div id="resultGrid" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 fade-in pb-8">
                 <!-- Injected via JS -->
             </div>
 
         </div>
     </main>
 
-    <footer class="bg-slate-900 text-white mt-auto">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div>
-                    <div class="flex items-center mb-4">
-                        <svg class="w-6 h-6 text-brand-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                        <h2 class="text-xl font-bold">জব পোর্টাল বিডি</h2>
-                    </div>
-                    <p class="text-slate-400 text-sm leading-relaxed">বাংলাদেশের সকল সরকারি ও বেসরকারি চাকরির পরীক্ষার সময়সূচি, সিট প্ল্যান এবং ফলাফল সবার আগে নির্ভরযোগ্যভাবে পৌঁছে দেওয়ার লক্ষ্যে আমরা কাজ করছি।</p>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold mb-4 border-b border-slate-700 pb-2 inline-block">গুরুত্বপূর্ণ লিংক</h3>
-                    <ul class="space-y-2 text-slate-400 text-sm">
-                        <li><a href="#" class="hover:text-white transition-colors">বিপিএসসি (BPSC)</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">বাংলাদেশ ব্যাংক</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">প্রাথমিক শিক্ষা অধিদপ্তর</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold mb-4 border-b border-slate-700 pb-2 inline-block">সহায়তা</h3>
-                    <ul class="space-y-2 text-slate-400 text-sm">
-                        <li><a href="#" class="hover:text-white transition-colors">গোপনীয়তা নীতি (Privacy Policy)</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">শর্তাবলী (Terms)</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">যোগাযোগ করুন</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="border-t border-slate-800 mt-8 pt-6 text-center text-sm text-slate-500">
-                &copy; ২০২৬ জব পোর্টাল বিডি। সর্বস্বত্ব সংরক্ষিত।
-            </div>
+    <footer class="bg-white border-t border-slate-200 mt-auto py-4">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-2">
+            <p class="text-slate-500 text-sm font-medium">&copy; ২০২৬ স্মার্ট ফাইন্ডার।</p>
+            <button onclick="openAboutModal()" class="text-brand-600 hover:text-brand-800 text-sm font-bold transition-colors flex items-center">
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                আমাদের সম্পর্কে
+            </button>
         </div>
     </footer>
 
-    <div id="examModal" class="fixed inset-0 z-50 hidden modal-backdrop bg-slate-900/60 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div id="aboutModal" class="fixed inset-0 z-50 hidden modal-backdrop bg-slate-900/60 overflow-y-auto" aria-labelledby="about-title" role="dialog" aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen p-4 text-center sm:p-0">
+            <!-- Backdrop -->
+            <div class="fixed inset-0 bg-transparent transition-opacity" aria-hidden="true" onclick="closeAboutModal()"></div>
             
+            <div class="inline-block align-middle bg-white rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:max-w-sm w-full scale-in relative z-10 p-6 sm:p-8">
+                <!-- Close Button -->
+                <button onclick="closeAboutModal()" class="absolute top-3 right-3 bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-700 rounded-full p-2 transition-colors focus:outline-none">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+
+                <div class="text-center mb-5">
+                    <div class="inline-flex items-center justify-center w-14 h-14 bg-brand-50 rounded-full mb-4 text-brand-600 shadow-sm border border-brand-100">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900" id="about-title">আমাদের সম্পর্কে</h3>
+                </div>
+                <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+                    <p class="text-slate-600 text-base leading-relaxed text-center font-medium">
+                        এই অ্যাপটি সম্পূর্ণ <span class="text-brand-600 font-bold">বিনামূল্যে</span> ব্যবহারের জন্য তৈরি করা হয়েছে এবং এতে কোনো ধরনের <span class="text-red-500 font-bold">বিজ্ঞাপন (Ads) নেই</span>। 
+                        <br><br>
+                        চাকরিপ্রত্যাশী ও বেকার শিক্ষার্থীদের পরীক্ষার সিট প্ল্যান এবং ফলাফল খোঁজার কষ্ট ও সময় লাঘব করাই আমাদের মূল লক্ষ্য।
+                    </p>
+                </div>
+                <button onclick="closeAboutModal()" class="mt-6 w-full py-3.5 px-4 border border-transparent rounded-xl shadow-sm text-lg font-bold text-white bg-brand-600 hover:bg-brand-700 focus:outline-none transition-colors">
+                    বুঝতে পেরেছি
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="examModal" class="fixed inset-0 z-40 hidden modal-backdrop bg-slate-900/70 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end sm:items-center justify-center min-h-screen pt-4 px-4 pb-0 sm:pb-20 text-center sm:p-0">
+            <!-- Backdrop -->
             <div class="fixed inset-0 bg-transparent transition-opacity" aria-hidden="true" onclick="closeModal()"></div>
             
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            
-            <div class="inline-block align-bottom bg-white rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full scale-in relative">
+            <div class="inline-block align-bottom bg-white rounded-t-3xl sm:rounded-3xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full scale-in relative z-10">
                 
                 <!-- Close Button -->
-                <button onclick="closeModal()" class="absolute top-4 right-4 bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-700 rounded-full p-2 transition-colors z-10 focus:outline-none">
+                <button onclick="closeModal()" class="absolute top-4 right-4 bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-700 rounded-full p-2 transition-colors z-20 focus:outline-none">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
 
                 <!-- 1. Input State -->
-                <div id="modalStateInput" class="p-6 sm:p-8 block">
-                    <div class="mb-6">
+                <div id="modalStateInput" class="p-6 sm:p-8 block mt-4 sm:mt-0">
+                    <div class="mb-6 pr-6">
                         <span id="modalExamTypeBadge" class="inline-block px-3 py-1 bg-brand-100 text-brand-700 rounded-full text-xs font-bold mb-3 tracking-wide"></span>
-                        <h3 id="modalExamTitle" class="text-2xl font-bold text-slate-900 leading-snug"></h3>
+                        <h3 id="modalExamTitle" class="text-xl sm:text-2xl font-bold text-slate-900 leading-snug"></h3>
                     </div>
                     
-                    <form id="modalSearchForm" class="space-y-6">
+                    <form id="modalSearchForm" class="space-y-5">
                         <input type="hidden" id="modalJsonUrl" value="">
-                        
                         <div>
-                            <label for="rollNumber" class="block text-lg font-bold text-slate-700 mb-2">রোল নম্বর প্রদান করুন</label>
+                            <label for="rollNumber" class="block text-base sm:text-lg font-bold text-slate-700 mb-2">রোল নম্বর প্রদান করুন</label>
                             <input type="number" id="rollNumber" placeholder="যেমন: 613000" required
                                 class="block w-full px-5 py-4 text-xl border-2 border-slate-200 rounded-2xl bg-slate-50 focus:bg-white focus:outline-none focus:ring-0 focus:border-brand-500 transition-all text-slate-900 font-bold placeholder-slate-400 hover:border-slate-300 text-center tracking-wider" />
                         </div>
-
-                        <button type="submit" class="w-full flex justify-center items-center py-4 px-4 border border-transparent rounded-2xl shadow-lg text-xl font-bold text-white bg-brand-600 hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 transition-all transform hover:-translate-y-0.5">
+                        <button type="submit" class="w-full flex justify-center items-center py-4 px-4 border border-transparent rounded-2xl shadow-md text-xl font-bold text-white bg-brand-600 hover:bg-brand-700 focus:outline-none transition-all transform hover:-translate-y-0.5 active:translate-y-0">
                             তথ্য খুঁজুন
                         </button>
                     </form>
 
-                    <div id="modalErrorBox" class="hidden mt-5 p-4 bg-red-50 border border-red-100 rounded-xl text-red-600 text-base flex items-start">
-                        <svg class="w-6 h-6 mr-3 flex-shrink-0 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                        <span id="modalErrorMsg" class="font-bold leading-relaxed"></span>
+                    <!-- Error Msg -->
+                    <div id="modalErrorBox" class="hidden mt-4 p-4 bg-red-50 border border-red-100 rounded-xl text-red-600 text-sm sm:text-base flex items-start">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 flex-shrink-0 text-red-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                        <span id="modalErrorMsg" class="font-bold leading-snug"></span>
                     </div>
                 </div>
 
                 <!-- 2. Loading State -->
-                <div id="modalStateLoading" class="hidden p-12 text-center flex-col items-center justify-center">
-                    <svg class="animate-spin h-12 w-12 text-brand-600 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <div id="modalStateLoading" class="hidden p-12 text-center flex-col items-center justify-center min-h-[300px]">
+                    <svg class="animate-spin h-10 w-10 sm:h-12 sm:w-12 text-brand-600 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    <h3 class="text-xl font-bold text-slate-700">খোঁজা হচ্ছে...</h3>
-                    <p class="text-slate-500 text-sm mt-2">দয়া করে অপেক্ষা করুন</p>
+                    <h3 class="text-lg sm:text-xl font-bold text-slate-700">খোঁজা হচ্ছে...</h3>
+                    <p class="text-slate-500 text-sm mt-1">দয়া করে অপেক্ষা করুন</p>
                 </div>
 
-                <!-- 3. Result / Seat Plan State -->
-                <div id="modalStateResult" class="hidden p-6 sm:p-8 bg-slate-50">
-                    
-                    <button onclick="resetModalState()" class="mb-4 inline-flex items-center text-sm font-bold text-slate-500 hover:text-brand-600 transition-colors">
+                <!-- 3. Result State -->
+                <div id="modalStateResult" class="hidden p-5 sm:p-8 bg-slate-50 min-h-[300px]">
+                    <button onclick="resetModalState()" class="mb-4 sm:mb-5 inline-flex items-center text-sm font-bold text-slate-500 hover:text-brand-600 transition-colors bg-white px-3 py-1.5 rounded-lg border border-slate-200 shadow-sm">
                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                         ফিরে যান
                     </button>
 
                     <!-- Pass Result View -->
-                    <div id="viewPass" class="hidden text-center bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
-                        <div class="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-4 ring-8 ring-green-50">
-                            <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                    <div id="viewPass" class="hidden text-center bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200">
+                        <div class="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-green-100 rounded-full mb-4 ring-8 ring-green-50">
+                            <svg class="w-8 h-8 sm:w-10 sm:h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                         </div>
-                        <h3 class="text-3xl font-bold text-slate-900 mb-2">অভিনন্দন!</h3>
-                        <p class="text-slate-600 font-bold text-lg mb-4">আপনার রোল নম্বরটি ফলাফলের তালিকায় আছে।</p>
-                        <div class="bg-slate-100 border border-slate-200 py-3 px-6 rounded-xl inline-block">
-                            <span class="text-slate-500 text-sm mr-2 font-bold">রোল নম্বর:</span>
-                            <span id="passRollText" class="text-brand-700 font-bold text-2xl tracking-widest"></span>
+                        <h3 class="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">অভিনন্দন!</h3>
+                        <p class="text-slate-600 font-bold text-base sm:text-lg mb-4">আপনার রোল নম্বরটি তালিকায় আছে।</p>
+                        <div class="bg-slate-100 border border-slate-200 py-2 sm:py-3 px-4 sm:px-6 rounded-xl inline-block">
+                            <span class="text-slate-500 text-sm mr-2 font-bold">রোল:</span>
+                            <span id="passRollText" class="text-brand-700 font-bold text-xl sm:text-2xl tracking-widest"></span>
                         </div>
                     </div>
 
                     <!-- Seat Plan View -->
-                    <div id="viewSeatPlan" class="hidden text-left">
-                        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 mb-4">
-                            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">পরীক্ষার কেন্দ্র</h4>
+                    <div id="viewSeatPlan" class="hidden text-left space-y-3 sm:space-y-4">
+                        <!-- Center Name -->
+                        <div class="bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-slate-200">
+                            <h4 class="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 sm:mb-3">পরীক্ষার কেন্দ্র</h4>
                             <div class="flex items-start">
-                                <div class="bg-brand-50 p-2.5 rounded-xl mr-4 flex-shrink-0 text-brand-600">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                                <div class="bg-brand-50 p-2 sm:p-2.5 rounded-xl mr-3 sm:mr-4 flex-shrink-0 text-brand-600">
+                                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                                 </div>
                                 <div>
-                                    <h3 id="resCenterName" class="text-xl font-bold text-slate-900 leading-tight"></h3>
-                                    <p id="resCenterAddress" class="text-slate-600 font-medium text-sm mt-1"></p>
+                                    <h3 id="resCenterName" class="text-lg sm:text-xl font-bold text-slate-900 leading-tight"></h3>
+                                    <p id="resCenterAddress" class="text-slate-600 font-medium text-xs sm:text-sm mt-1"></p>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Bus Info -->
-                        <div id="resBusCard" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 mb-4 flex items-start">
-                             <div class="bg-indigo-50 p-2 rounded-xl mr-4 flex-shrink-0 text-indigo-600">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                        <div id="resBusCard" class="bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-slate-200 flex items-start">
+                             <div class="bg-indigo-50 p-2 rounded-xl mr-3 sm:mr-4 flex-shrink-0 text-indigo-600">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
                             </div>
                             <div class="w-full">
                                 <h4 class="font-bold text-slate-800 text-sm mb-2">যাতায়াতের রুট</h4>
-                                <div class="bg-slate-50 p-3 rounded-lg text-sm space-y-1.5 border border-slate-100">
-                                    <div class="flex justify-between"><span class="font-bold text-slate-500">বাস:</span> <span id="resBusNames" class="font-bold text-slate-800 text-right"></span></div>
-                                    <div class="flex justify-between"><span class="font-bold text-slate-500">নামার স্থান:</span> <span id="resBusStand" class="font-bold text-slate-800 text-right"></span></div>
+                                <div class="bg-slate-50 p-2.5 sm:p-3 rounded-lg text-xs sm:text-sm space-y-1.5 border border-slate-100">
+                                    <div class="flex justify-between gap-2"><span class="font-bold text-slate-500 whitespace-nowrap">বাস:</span> <span id="resBusNames" class="font-bold text-slate-800 text-right"></span></div>
+                                    <div class="flex justify-between gap-2"><span class="font-bold text-slate-500 whitespace-nowrap">নামার স্থান:</span> <span id="resBusStand" class="font-bold text-slate-800 text-right"></span></div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Traffic -->
-                        <div id="resTrafficCard" class="bg-amber-50 p-5 rounded-2xl shadow-sm border border-amber-100 mb-4 flex items-start">
-                            <div class="bg-amber-100 p-2 rounded-xl mr-4 flex-shrink-0 text-amber-600">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                        <div id="resTrafficCard" class="bg-amber-50 p-4 sm:p-5 rounded-2xl shadow-sm border border-amber-100 flex items-start">
+                            <div class="bg-amber-100 p-2 rounded-xl mr-3 sm:mr-4 flex-shrink-0 text-amber-600">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                             </div>
                             <div>
-                                <h4 class="font-bold text-amber-900 text-sm mb-1">ট্রাফিক সতর্কতা</h4>
-                                <p id="resTraffic" class="text-amber-800 text-sm font-medium"></p>
+                                <h4 class="font-bold text-amber-900 text-xs sm:text-sm mb-1">ট্রাফিক সতর্কতা</h4>
+                                <p id="resTraffic" class="text-amber-800 text-xs sm:text-sm font-medium"></p>
                             </div>
                         </div>
 
                         <!-- Hotels -->
                         <div id="resHotelCard" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                            <div class="bg-slate-100 p-3 border-b border-slate-200 flex items-center">
+                            <div class="bg-slate-100 p-3 flex items-center">
                                 <svg class="w-4 h-4 text-slate-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                                <h4 class="font-bold text-slate-800 text-sm">কাছাকাছি সাশ্রয়ী হোটেল</h4>
+                                <h4 class="font-bold text-slate-800 text-xs sm:text-sm">কাছাকাছি সাশ্রয়ী হোটেল</h4>
                             </div>
-                            <div id="hotelListContainer" class="divide-y divide-slate-100 max-h-48 overflow-y-auto">
+                            <div id="hotelListContainer" class="divide-y divide-slate-100 max-h-48 overflow-y-auto bg-white">
                                 <!-- Generated dynamically -->
                             </div>
                         </div>
@@ -348,7 +343,15 @@
             return num.toString().replace(/\d/g, d => bnDigits[d]);
         }
 
-        // --- Data Fetching Logic ---
+        // About Modal Control
+        function openAboutModal() {
+            document.getElementById('aboutModal').classList.remove('hidden');
+        }
+        function closeAboutModal() {
+            document.getElementById('aboutModal').classList.add('hidden');
+        }
+
+        // Advanced Fetch with Timeout and Proxy Fallback
         async function fetchWithRetry(url, retries = 2, timeout = 6000, options = {}) {
             for (let i = 0; i < retries; i++) {
                 const controller = new AbortController();
@@ -359,10 +362,10 @@
                     if (!res.ok) throw new Error(`HTTP ${res.status}`);
                     
                     const text = await res.text();
-                    if (text.trim().startsWith('<')) throw new Error("AUTH_ERROR"); // HTML received
+                    if (text.trim().startsWith('<')) throw new Error("AUTH_ERROR"); // Blocked by Google Login
                     
                     const json = JSON.parse(text);
-                    if (json.error) throw new Error(json.error);
+                    if (json.error) throw new Error(json.error); // Sheet custom error
                     return json;
                 } catch (err) {
                     clearTimeout(id);
@@ -373,84 +376,100 @@
         }
 
         async function initApp() {
-            document.getElementById('gridLoader').classList.remove('hidden');
-            document.getElementById('gridError').classList.add('hidden');
-            document.getElementById('seatPlanGrid').classList.add('hidden');
-            document.getElementById('resultGrid').classList.add('hidden');
+            const loader = document.getElementById('gridLoader');
+            const errorBox = document.getElementById('gridError');
+            const seatGrid = document.getElementById('seatPlanGrid');
+            const resGrid = document.getElementById('resultGrid');
+            const emptyBox = document.getElementById('gridEmpty');
+            
+            loader.classList.remove('hidden');
+            errorBox.classList.add('hidden');
+            emptyBox.classList.add('hidden');
+            seatGrid.classList.add('hidden');
+            resGrid.classList.add('hidden');
 
             try {
                 let data;
                 try {
+                    // 1. Direct fetch to Sheet API
                     data = await fetchWithRetry(GOOGLE_SHEET_API, 1, 8000, { redirect: "follow" });
                 } catch (e) {
+                    console.warn("Direct fetch failed, using proxy...", e);
+                    // 2. Fallback to Cloudflare proxy
                     data = await fetchWithRetry(PROXY_BASE + encodeURIComponent(GOOGLE_SHEET_API), 2, 8000);
                 }
 
-                if (!data || data.length === 0) throw new Error("EMPTY_DATA");
-
-                // Process and categorize data
                 seatPlanExams = [];
                 resultExams = [];
 
-                data.forEach(exam => {
-                    const title = exam.title || exam[0];
-                    const url = exam.url || exam.jsonUrl || exam[1];
-                    
-                    if (title && url) {
-                        const t = title.toLowerCase();
-                        // Categorization logic based on title keywords
-                        if (t.includes('ফলাফল') || t.includes('রেজাল্ট') || t.includes('result') || t.includes('viva') || t.includes('mcq')) {
-                            resultExams.push({ title, url, type: 'result' });
-                        } else {
-                            seatPlanExams.push({ title, url, type: 'seatplan' });
+                if (Array.isArray(data) && data.length > 0) {
+                    // Categorize Data
+                    data.forEach(exam => {
+                        const title = exam.title || exam[0];
+                        const url = exam.url || exam.jsonUrl || exam[1];
+                        
+                        if (title && url) {
+                            const t = title.toLowerCase();
+                            // Smart detection for Result vs Seatplan
+                            if (t.includes('ফলাফল') || t.includes('রেজাল্ট') || t.includes('result') || t.includes('viva') || t.includes('mcq') || t.includes('লিখিত')) {
+                                resultExams.push({ title, url, type: 'result' });
+                            } else {
+                                seatPlanExams.push({ title, url, type: 'seatplan' });
+                            }
                         }
-                    }
-                });
+                    });
+                }
 
                 document.getElementById('countSeatPlan').textContent = toBn(seatPlanExams.length);
                 document.getElementById('countResult').textContent = toBn(resultExams.length);
 
                 renderGrids();
-                document.getElementById('gridLoader').classList.add('hidden');
-                switchTab(currentTab); // Ensure correct tab is shown
+                loader.classList.add('hidden');
+                switchTab(currentTab); 
 
             } catch (error) {
-                console.error(error);
-                document.getElementById('gridLoader').classList.add('hidden');
-                document.getElementById('gridError').classList.remove('hidden');
-                document.getElementById('gridErrorMsg').textContent = 
-                    (error.message === "AUTH_ERROR") ? "গুগল স্ক্রিপ্ট পারমিশন সেট করা হয়নি। 'Anyone' এক্সেস দিন।" : "সার্ভারের সাথে সংযোগ করা যাচ্ছে না। দয়া করে রিলোড করুন।";
+                console.error("Initialization Error:", error);
+                loader.classList.add('hidden');
+                errorBox.classList.remove('hidden');
+                errorBox.classList.add('flex');
+                
+                let errorText = "সার্ভারের সাথে সংযোগ করা যাচ্ছে না। দয়া করে রিলোড করুন।";
+                if (error.message === "AUTH_ERROR") {
+                    errorText = "গুগল শিট পারমিশন 'Anyone' করা নেই।";
+                }
+                document.getElementById('gridErrorMsg').textContent = errorText;
             }
         }
 
-        // --- Grid Rendering & Tabs ---
+        // Create Card UI
         function createCardHTML(exam) {
-            const badgeStr = exam.type === 'result' 
-                ? `<span class="bg-slate-100 text-slate-600 text-xs font-bold px-2 py-1 rounded">ফলাফল</span>`
-                : `<span class="bg-brand-50 text-brand-600 text-xs font-bold px-2 py-1 rounded">সিট প্ল্যান</span>`;
+            const isRes = exam.type === 'result';
+            const badgeClass = isRes ? 'bg-slate-100 text-slate-600' : 'bg-brand-50 text-brand-600';
+            const badgeText = isRes ? 'ফলাফল' : 'সিট প্ল্যান';
             
-            // Generate a safe stringified version of the object to pass to onclick
+            // Safe JSON string for onclick attribute
             const safeObj = encodeURIComponent(JSON.stringify(exam));
 
             return `
-                <div onclick="openModal('${safeObj}')" class="bg-white border border-slate-200 rounded-2xl p-5 cursor-pointer hover:shadow-lg hover:border-brand-300 transition-all transform hover:-translate-y-1 flex flex-col h-full group">
-                    <div class="mb-3">${badgeStr}</div>
-                    <h3 class="font-bold text-lg text-slate-800 leading-snug group-hover:text-brand-600 transition-colors flex-grow">${exam.title}</h3>
+                <div onclick="openModal('${safeObj}')" class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 cursor-pointer hover:shadow-lg hover:border-brand-300 transition-all transform hover:-translate-y-1 flex flex-col h-full group">
+                    <div class="mb-3 inline-block">
+                        <span class="${badgeClass} text-[11px] sm:text-xs font-bold px-2 py-1 rounded-md tracking-wide">${badgeText}</span>
+                    </div>
+                    <h3 class="font-bold text-base sm:text-lg text-slate-800 leading-snug group-hover:text-brand-600 transition-colors flex-grow">${exam.title}</h3>
                     <div class="mt-4 flex items-center text-sm font-bold text-brand-500 group-hover:text-brand-600">
-                        চেক করুন <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        চেক করুন 
+                        <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                     </div>
                 </div>
             `;
         }
 
         function renderGrids() {
-            const seatPlanHtml = seatPlanExams.map(createCardHTML).join('');
-            const resultHtml = resultExams.map(createCardHTML).join('');
-
-            document.getElementById('seatPlanGrid').innerHTML = seatPlanHtml;
-            document.getElementById('resultGrid').innerHTML = resultHtml;
+            document.getElementById('seatPlanGrid').innerHTML = seatPlanExams.map(createCardHTML).join('');
+            document.getElementById('resultGrid').innerHTML = resultExams.map(createCardHTML).join('');
         }
 
+        // Switch Tabs (Seatplan vs Result)
         function switchTab(tab) {
             currentTab = tab;
             const btnSeatPlan = document.getElementById('tabSeatPlan');
@@ -459,37 +478,46 @@
             const gridResult = document.getElementById('resultGrid');
             const emptyState = document.getElementById('gridEmpty');
 
-            // Reset Tabs
+            // Reset Tab styling
             [btnSeatPlan, btnResult].forEach(btn => {
-                btn.className = "tab-btn w-1/2 sm:w-auto border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 whitespace-nowrap py-4 px-1 border-b-2 font-bold text-lg transition-colors";
+                btn.className = "tab-btn flex-1 sm:flex-none border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300 whitespace-nowrap py-3 sm:py-4 px-2 sm:px-1 border-b-2 font-bold text-base sm:text-lg transition-colors";
             });
 
             gridSeatPlan.classList.add('hidden');
             gridResult.classList.add('hidden');
             emptyState.classList.add('hidden');
+            emptyState.classList.remove('flex');
 
             if (tab === 'seatplan') {
-                btnSeatPlan.className = "tab-btn w-1/2 sm:w-auto border-brand-600 text-brand-600 whitespace-nowrap py-4 px-1 border-b-2 font-bold text-lg transition-colors";
-                if (seatPlanExams.length > 0) gridSeatPlan.classList.remove('hidden');
-                else emptyState.classList.remove('hidden');
+                btnSeatPlan.className = "tab-btn flex-1 sm:flex-none border-brand-600 text-brand-600 whitespace-nowrap py-3 sm:py-4 px-2 sm:px-1 border-b-2 font-bold text-base sm:text-lg transition-colors";
+                if (seatPlanExams.length > 0) {
+                    gridSeatPlan.classList.remove('hidden');
+                } else {
+                    emptyState.classList.remove('hidden');
+                    emptyState.classList.add('flex');
+                }
             } else {
-                btnResult.className = "tab-btn w-1/2 sm:w-auto border-brand-600 text-brand-600 whitespace-nowrap py-4 px-1 border-b-2 font-bold text-lg transition-colors";
-                if (resultExams.length > 0) gridResult.classList.remove('hidden');
-                else emptyState.classList.remove('hidden');
+                btnResult.className = "tab-btn flex-1 sm:flex-none border-brand-600 text-brand-600 whitespace-nowrap py-3 sm:py-4 px-2 sm:px-1 border-b-2 font-bold text-base sm:text-lg transition-colors";
+                if (resultExams.length > 0) {
+                    gridResult.classList.remove('hidden');
+                } else {
+                    emptyState.classList.remove('hidden');
+                    emptyState.classList.add('flex');
+                }
             }
         }
 
-        // --- Modal & Search Logic ---
+        // --- Search Modal Logic ---
         const modal = document.getElementById('examModal');
         const mInput = document.getElementById('modalStateInput');
         const mLoad = document.getElementById('modalStateLoading');
         const mRes = document.getElementById('modalStateResult');
         const mErr = document.getElementById('modalErrorBox');
+        const body = document.body;
 
         function openModal(examStr) {
             const exam = JSON.parse(decodeURIComponent(examStr));
             
-            // Setup Modal Content
             document.getElementById('modalExamTypeBadge').textContent = exam.type === 'result' ? 'ফলাফল' : 'সিট প্ল্যান';
             document.getElementById('modalExamTitle').textContent = exam.title;
             document.getElementById('modalJsonUrl').value = exam.url;
@@ -497,16 +525,20 @@
             
             resetModalState();
             modal.classList.remove('hidden');
-            setTimeout(() => document.getElementById('rollNumber').focus(), 100); // Auto focus input
+            body.style.overflow = 'hidden'; // Prevent background scroll
+            
+            setTimeout(() => document.getElementById('rollNumber').focus(), 100);
         }
 
         function closeModal() {
             modal.classList.add('hidden');
+            body.style.overflow = '';
         }
 
         function resetModalState() {
             mInput.classList.remove('hidden');
             mLoad.classList.add('hidden');
+            mLoad.classList.remove('flex');
             mRes.classList.add('hidden');
             mErr.classList.add('hidden');
         }
@@ -516,10 +548,11 @@
             mErr.classList.remove('hidden');
             mErr.classList.add('fade-in');
             mLoad.classList.add('hidden');
+            mLoad.classList.remove('flex');
             mInput.classList.remove('hidden');
         }
 
-        // Form Submit within Modal
+        // Modal Form Submit
         document.getElementById('modalSearchForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const rollInput = document.getElementById('rollNumber').value.trim();
@@ -528,17 +561,19 @@
 
             if (isNaN(roll)) return showModalError("সঠিক রোল নম্বর প্রদান করুন।");
 
-            // UI changes
+            // Show Loading
             mInput.classList.add('hidden');
             mErr.classList.add('hidden');
             mLoad.classList.remove('hidden');
-            mLoad.classList.add('flex'); // it's flex-col
+            mLoad.classList.add('flex');
 
             try {
+                // Always use Cloudflare Proxy to fetch JSON data safely
                 const proxyUrl = PROXY_BASE + encodeURIComponent(url);
-                const data = await fetchWithRetry(proxyUrl, 2, 8000, { redirect: "follow" });
+                const data = await fetchWithRetry(proxyUrl, 3, 8000, { redirect: "follow" });
                 
                 let parseData = data;
+                // Handle nested structures
                 if (parseData && typeof parseData === 'object' && !Array.isArray(parseData)) {
                     const nested = Object.values(parseData).find(v => Array.isArray(v));
                     if (nested) parseData = nested;
@@ -547,20 +582,21 @@
                 mLoad.classList.add('hidden');
                 mLoad.classList.remove('flex');
 
-                // Logic 1: Result Array
+                // Logic 1: Result
                 if (Array.isArray(parseData) && (typeof parseData[0] === 'string' || typeof parseData[0] === 'number')) {
                     const isPassed = parseData.some(item => item.toString() === rollInput);
                     if (isPassed) showPassUI(rollInput);
-                    else showModalError(`দুঃখিত, আপনার রোল নম্বর (${rollInput}) ফলাফলের তালিকায় পাওয়া যায়নি।`);
+                    else showModalError(`দুঃখিত, আপনার রোল নম্বর (${rollInput}) ফলাফলের তালিকায় নেই।`);
                     return;
                 }
 
-                // Logic 2: Seat Plan Array
+                // Logic 2: Seat Plan
                 if (Array.isArray(parseData) && typeof parseData[0] === 'object') {
                     const center = parseData.find(c => {
                         const sStr = c.start_roll || c.Start_Roll || c.startRoll || c.start || c.Start;
                         const eStr = c.end_roll || c.End_Roll || c.endRoll || c.end || c.End;
                         if (!sStr || !eStr) return false;
+                        
                         const s = parseInt(sStr.toString().replace(/,/g, '').trim(), 10);
                         const e = parseInt(eStr.toString().replace(/,/g, '').trim(), 10);
                         return roll >= s && roll <= e;
@@ -573,15 +609,15 @@
 
                 showModalError("ডেটার ফরমেট সঠিক নয়।");
             } catch (error) {
-                console.error(error);
+                console.error("Search Error:", error);
                 let msg = "ডেটা লোড করা যাচ্ছে না। আবার চেষ্টা করুন।";
                 if(error.message.includes('HTTP')) msg = "সার্ভার এরর। ইন্টারনেট চেক করুন।";
-                if(error.message.includes('Invalid JSON')) msg = "সঠিক ডেটা পাওয়া যায়নি বা পরীক্ষাটি নেই।";
+                if(error.message.includes('Invalid JSON') || error.message.includes('Unexpected')) msg = "সঠিক ডেটা পাওয়া যায়নি বা পরীক্ষাটি নেই।";
                 showModalError(msg);
             }
         });
 
-        // --- Result Display Functions ---
+        // Show Success Result
         function showPassUI(roll) {
             mRes.classList.remove('hidden');
             document.getElementById('viewPass').classList.remove('hidden');
@@ -590,6 +626,7 @@
             mRes.classList.add('fade-in');
         }
 
+        // Show Seat Plan Detail
         function showSeatPlanUI(center) {
             mRes.classList.remove('hidden');
             document.getElementById('viewPass').classList.add('hidden');
@@ -598,7 +635,7 @@
             document.getElementById('resCenterName').textContent = center.name || center.Name || 'নাম দেওয়া নেই';
             document.getElementById('resCenterAddress').textContent = center.address || center.Address || 'ঠিকানা দেওয়া নেই';
 
-            // Mentor Guide
+            // Bus / Guide
             const g = center.mentor_guide || center.guide;
             const bCard = document.getElementById('resBusCard');
             if (g && (g.bus_names || g.bus_stand)) {
@@ -626,13 +663,14 @@
                 hCard.classList.remove('hidden');
                 const hList = document.getElementById('hotelListContainer');
                 hList.innerHTML = h.map(hotel => `
-                    <div class="p-4 hover:bg-slate-50">
+                    <div class="p-3 sm:p-4 hover:bg-slate-50 transition-colors">
                         <div class="flex justify-between items-start mb-1">
                             <h5 class="font-bold text-slate-800 text-sm">${hotel.name || 'হোটেল'}</h5>
-                            ${hotel.price ? `<span class="bg-green-100 text-green-700 text-xs font-bold px-2 py-0.5 rounded">${hotel.price}</span>` : ''}
+                            ${hotel.price ? `<span class="bg-green-100 text-green-700 text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded whitespace-nowrap ml-2">${hotel.price}</span>` : ''}
                         </div>
-                        <div class="text-sm text-slate-600 font-medium">${hotel.location || ''} 
-                            ${hotel.gender ? `<span class="bg-purple-100 text-purple-700 text-xs px-2 py-0.5 rounded ml-2">${hotel.gender}</span>` : ''}
+                        <div class="text-xs sm:text-sm text-slate-600 font-medium flex items-center flex-wrap gap-1">
+                            <span>${hotel.location || ''}</span>
+                            ${hotel.gender ? `<span class="bg-purple-100 text-purple-700 text-[10px] px-1.5 py-0.5 rounded">${hotel.gender}</span>` : ''}
                         </div>
                     </div>
                 `).join('');
@@ -643,7 +681,7 @@
             mRes.classList.add('fade-in');
         }
 
-        // Initialize on load
+        // Initialize App on load
         initApp();
     </script>
 </body>
